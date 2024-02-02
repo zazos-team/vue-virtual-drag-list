@@ -1,5 +1,5 @@
 /*!
- * vue-virtual-drag-list v2.8.3
+ * vue-virtual-drag-list v2.8.4
  * open source under the MIT license
  * https://github.com/mfuu/vue-virtual-drag-list#readme
  */
@@ -12,26 +12,40 @@
 
   Vue = Vue && Object.prototype.hasOwnProperty.call(Vue, 'default') ? Vue['default'] : Vue;
 
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
+  function ownKeys(e, r) {
+    var t = Object.keys(e);
     if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      enumerableOnly && (symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      })), keys.push.apply(keys, symbols);
+      var o = Object.getOwnPropertySymbols(e);
+      r && (o = o.filter(function (r) {
+        return Object.getOwnPropertyDescriptor(e, r).enumerable;
+      })), t.push.apply(t, o);
     }
-    return keys;
+    return t;
   }
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = null != arguments[i] ? arguments[i] : {};
-      i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+  function _objectSpread2(e) {
+    for (var r = 1; r < arguments.length; r++) {
+      var t = null != arguments[r] ? arguments[r] : {};
+      r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
+        _defineProperty(e, r, t[r]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
+        Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
       });
     }
-    return target;
+    return e;
+  }
+  function _toPrimitive(t, r) {
+    if ("object" != typeof t || !t) return t;
+    var e = t[Symbol.toPrimitive];
+    if (void 0 !== e) {
+      var i = e.call(t, r || "default");
+      if ("object" != typeof i) return i;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return ("string" === r ? String : Number)(t);
+  }
+  function _toPropertyKey(t) {
+    var i = _toPrimitive(t, "string");
+    return "symbol" == typeof i ? i : String(i);
   }
   function _defineProperty(obj, key, value) {
     key = _toPropertyKey(key);
@@ -71,20 +85,6 @@
   }
   function _nonIterableSpread() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  function _toPrimitive(input, hint) {
-    if (typeof input !== "object" || input === null) return input;
-    var prim = input[Symbol.toPrimitive];
-    if (prim !== undefined) {
-      var res = prim.call(input, hint || "default");
-      if (typeof res !== "object") return res;
-      throw new TypeError("@@toPrimitive must return a primitive value.");
-    }
-    return (hint === "string" ? String : Number)(input);
-  }
-  function _toPropertyKey(arg) {
-    var key = _toPrimitive(arg, "string");
-    return typeof key === "symbol" ? key : String(key);
   }
 
   var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -766,7 +766,6 @@
     }, item);
   }
 
-  var _scrollType, _scrollSize, _offsetSize, _offsetType;
   var CACLTYPE = {
     INIT: 'INIT',
     FIXED: 'FIXED',
@@ -781,10 +780,10 @@
     HORIZONTAL: 'horizontal',
     VERTICAL: 'vertical'
   };
-  var scrollType = (_scrollType = {}, _defineProperty(_scrollType, DIRECTION.VERTICAL, 'scrollTop'), _defineProperty(_scrollType, DIRECTION.HORIZONTAL, 'scrollLeft'), _scrollType);
-  var scrollSize = (_scrollSize = {}, _defineProperty(_scrollSize, DIRECTION.VERTICAL, 'scrollHeight'), _defineProperty(_scrollSize, DIRECTION.HORIZONTAL, 'scrollWidth'), _scrollSize);
-  var offsetSize = (_offsetSize = {}, _defineProperty(_offsetSize, DIRECTION.VERTICAL, 'offsetHeight'), _defineProperty(_offsetSize, DIRECTION.HORIZONTAL, 'offsetWidth'), _offsetSize);
-  var offsetType = (_offsetType = {}, _defineProperty(_offsetType, DIRECTION.VERTICAL, 'offsetTop'), _defineProperty(_offsetType, DIRECTION.HORIZONTAL, 'offsetLeft'), _offsetType);
+  var scrollType = _defineProperty(_defineProperty({}, DIRECTION.VERTICAL, 'scrollTop'), DIRECTION.HORIZONTAL, 'scrollLeft');
+  var scrollSize = _defineProperty(_defineProperty({}, DIRECTION.VERTICAL, 'scrollHeight'), DIRECTION.HORIZONTAL, 'scrollWidth');
+  var offsetSize = _defineProperty(_defineProperty({}, DIRECTION.VERTICAL, 'offsetHeight'), DIRECTION.HORIZONTAL, 'offsetWidth');
+  var offsetType = _defineProperty(_defineProperty({}, DIRECTION.VERTICAL, 'offsetTop'), DIRECTION.HORIZONTAL, 'offsetLeft');
   var attributes = ['size', 'keeps', 'scroller', 'direction', 'debounceTime', 'throttleTime'];
   function Virtual(options) {
     this.options = options;
@@ -885,7 +884,7 @@
           }
         });
       } else if (key === 'scroller') {
-        oldValue === null || oldValue === void 0 ? void 0 : oldValue.removeEventListener('scroll', this._onScroll);
+        oldValue === null || oldValue === void 0 || oldValue.removeEventListener('scroll', this._onScroll);
         this._updateScrollElement();
         this.addScrollEventListener();
       }
@@ -921,11 +920,11 @@
     },
     addScrollEventListener: function addScrollEventListener() {
       var _this$options$scrolle;
-      (_this$options$scrolle = this.options.scroller) === null || _this$options$scrolle === void 0 ? void 0 : _this$options$scrolle.addEventListener('scroll', this._onScroll, false);
+      (_this$options$scrolle = this.options.scroller) === null || _this$options$scrolle === void 0 || _this$options$scrolle.addEventListener('scroll', this._onScroll, false);
     },
     removeScrollEventListener: function removeScrollEventListener() {
       var _this$options$scrolle2;
-      (_this$options$scrolle2 = this.options.scroller) === null || _this$options$scrolle2 === void 0 ? void 0 : _this$options$scrolle2.removeEventListener('scroll', this._onScroll);
+      (_this$options$scrolle2 = this.options.scroller) === null || _this$options$scrolle2 === void 0 || _this$options$scrolle2.removeEventListener('scroll', this._onScroll);
     },
     // ========================================= Properties =========================================
     _updateOnScrollFunction: function _updateOnScrollFunction() {
@@ -1266,11 +1265,11 @@
       });
       if (this.reRendered) {
         var _Dnd$dragged;
-        (_Dnd$dragged = sortableDnd_min.dragged) === null || _Dnd$dragged === void 0 ? void 0 : _Dnd$dragged.remove();
+        (_Dnd$dragged = sortableDnd_min.dragged) === null || _Dnd$dragged === void 0 || _Dnd$dragged.remove();
       }
       if (params.from !== params.to && params.pullMode === 'clone') {
         var _Dnd$clone;
-        (_Dnd$clone = sortableDnd_min.clone) === null || _Dnd$clone === void 0 ? void 0 : _Dnd$clone.remove();
+        (_Dnd$clone = sortableDnd_min.clone) === null || _Dnd$clone === void 0 || _Dnd$clone.remove();
       }
       this.reRendered = false;
     },
@@ -1669,7 +1668,8 @@
         } else {
           clearTimeout(this.timer);
           this.timer = setTimeout(function () {
-            return _this4.virtual.updateRange();
+            var _this4$virtual;
+            return (_this4$virtual = _this4.virtual) === null || _this4$virtual === void 0 ? void 0 : _this4$virtual.updateRange();
           }, 17);
         }
         if (!this.sortable) {
