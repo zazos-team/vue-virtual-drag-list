@@ -265,7 +265,7 @@ const VirtualDragList = Vue.component('virtual-drag-list', {
         this._updateRange(oldList, this.list);
       } else {
         clearTimeout(this.timer);
-        this.timer = setTimeout(() => this.virtual.updateRange(), 17);
+        this.timer = setTimeout(() => this.virtual?.updateRange(), 17);
       }
 
       if (!this.sortable) {
